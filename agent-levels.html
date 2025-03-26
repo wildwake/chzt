@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>彩虹特工 - 特工档案</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/all.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Barlow', "PingFang SC", "Microsoft YaHei", sans-serif;
+            overflow: hidden;
+        }
+        
+        /* 浮动动画 */
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            33% { transform: translateY(-10px) rotate(2deg); }
+            66% { transform: translateY(-5px) rotate(-2deg); }
+        }
+        
+        .float-bubble {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .float-bubble-alt {
+            animation: float 8s ease-in-out infinite reverse;
+        }
+        
+        .float-bubble-slow {
+            animation: float 10s ease-in-out infinite;
+        }
+        
+        /* 闪烁动画 */
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .blink-slow {
+            animation: blink 3s infinite;
+        }
+        
+        .blink-fast {
+            animation: blink 0.8s infinite;
+        }
+        
+        /* 脉冲动画 */
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .pulse-effect {
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        /* 玻璃拟态效果 */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        
+        /* 棋盘网格背景 */
+        .grid-pattern {
+            background-size: 40px 40px;
+            background-image:
+                linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+        }
+        
+        /* 自定义滚动条 */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 5px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* 关卡完成状态 */
+        .level-complete {
+            background: linear-gradient(225deg, rgba(34, 211, 238, 0.2), rgba(59, 130, 246, 0.2));
+            border-color: rgba(59, 130, 246, 0.4);
+        }
+        
+        .level-locked {
+            filter: grayscale(0.8);
+            opacity: 0.7;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        yellow: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            200: '#fde68a',
+                            300: '#fcd34d',
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309',
+                            800: '#92400e',
+                            900: '#78350f',
+                            950: '#451a03',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-[#1e0d2d]">
+    <div class="h-full w-full overflow-hidden relative">
+        <!-- 渐变背景 -->
+        <div class="absolute inset-0 bg-gradient-to-b from-[#26294f] via-[#2a2a7a] to-[#1e0d2d] z-0"></div>
+        
+        <!-- 网格底纹 -->
+        <div class="absolute inset-0 grid-pattern opacity-60"></div>
+        
+        <!-- 装饰性圆形元素 -->
+        <div class="absolute top-[15%] right-8 w-16 h-16 rounded-full bg-yellow-400/20 float-bubble"></div>
+        <div class="absolute bottom-[30%] left-4 w-14 h-14 rounded-full bg-yellow-400/20 float-bubble-alt"></div>
+        
+        <!-- 内容容器 -->
+        <div class="relative z-10 flex flex-col h-full">
+            <!-- 顶部内容区域 -->
+            <div class="flex-initial px-5">
+                <!-- 返回按钮 -->
+                <div class="absolute top-5 left-5">
+                    <a href="home.html" class="glass-effect p-2.5 rounded-full text-white/80 hover:text-white shadow-md shadow-black/20 border border-white/10 block">
+                        <i class="fas fa-arrow-left text-sm"></i>
+                    </a>
+                </div>
+                
+                <!-- 顶部状态栏 -->
+                <div class="flex justify-center items-center mt-6 mb-6">
+                    <div class="flex items-center gap-2">
+                        <div class="w-1.5 h-1.5 rounded-full bg-yellow-400 animate-pulse"></div>
+                        <div class="text-[10px] text-yellow-300 font-mono tracking-wider uppercase">档案中心</div>
+                        <span class="mx-3 text-yellow-400/50">|</span>
+                        <div class="text-[10px] text-yellow-300/70 font-mono">
+                            <span class="text-yellow-300">#AF-7834</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 页面标题 -->
+                <div class="relative mb-6 mt-6">
+                    <!-- 背景装饰 -->
+                    <div class="absolute -top-10 left-0 right-0 h-40">
+                        <div class="absolute inset-0 bg-gradient-to-r from-yellow-600/20 via-yellow-500/20 to-yellow-600/20 blur-3xl"></div>
+                    </div>
+                    
+                    <div class="relative">
+                        <div class="flex flex-col items-center text-center">
+                            <div class="glass-effect px-3 py-1 rounded-lg mb-3 border-l-2 border-yellow-500">
+                                <span class="text-xs text-yellow-300 font-medium">彩虹特工司令部</span>
+                            </div>
+                            <h1 class="text-4xl font-bold text-white mb-3 tracking-tight">
+                                特工<span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-500">档案</span>
+                            </h1>
+                            <p class="text-sm text-yellow-200 mb-4 tracking-wide">总计99个彩虹密码挑战任务</p>
+                            
+                            <!-- 特工信息卡 -->
+                            <div class="glass-effect rounded-xl p-3 shadow-lg border border-yellow-500/20 w-full max-w-md mb-4">
+                                <div class="flex items-center">
+                                    <div class="flex-shrink-0 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-lg p-2.5 shadow-inner shadow-yellow-400/30">
+                                        <i class="fas fa-user-secret text-white text-lg"></i>
+                                    </div>
+                                    <div class="ml-3">
+                                        <div class="flex items-center gap-2">
+                                            <h2 class="text-base font-semibold text-white">特工代号：炫彩</h2>
+                                            <div class="text-[10px] px-1.5 py-0.5 bg-yellow-500/20 rounded text-yellow-300">
+                                                初级特工
+                                            </div>
+                                        </div>
+                                        <div class="text-xs text-yellow-200 mt-1">
+                                            <span>已完成：7/99关</span>
+                                            <span class="mx-2">|</span>
+                                            <span>累计解密时间：42分钟</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 关卡列表 -->
+            <div class="flex-1 px-3 overflow-y-auto custom-scrollbar pb-16">
+                <div class="max-w-md mx-auto">
+                    <!-- 入门章节 -->
+                    <div class="mb-4">
+                        <div class="flex items-center justify-center mb-2 px-2">
+                            <div class="w-1.5 h-6 bg-gradient-to-b from-green-400 to-green-600 rounded-full mr-2"></div>
+                            <h3 class="text-sm font-semibold text-white">入门任务：彩虹启示</h3>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <!-- 已完成关卡 -->
+                            <div class="glass-effect rounded-lg p-2 level-complete">
+                                <div class="text-center">
+                                    <div class="bg-white/10 rounded-full w-8 h-8 flex items-center justify-center mx-auto">
+                                        <span class="text-sm font-bold text-white">1</span>
+                                    </div>
+                                    <div class="flex justify-center mt-2">
+                                        <div class="text-[8px] px-1 bg-blue-500/20 rounded text-blue-300">通关</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 已完成关卡 -->
+                            <div class="glass-effect rounded-lg p-2 level-complete">
+                                <div class="text-center">
+                                    <div class="bg-white/10 rounded-full w-8 h-8 flex items-center justify-center mx-auto">
+                                        <span class="text-sm font-bold text-white">2</span>
+                                    </div>
+                                    <div class="flex justify-center mt-2">
+                                        <div class="text-[8px] px-1 bg-blue-500/20 rounded text-blue-300">通关</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 已完成关卡 -->
+                            <div class="glass-effect rounded-lg p-2 level-complete">
+                                <div class="text-center">
+                                    <div class="bg-white/10 rounded-full w-8 h-8 flex items-center justify-center mx-auto">
+                                        <span class="text-sm font-bold text-white">3</span>
+                                    </div>
+                                    <div class="flex justify-center mt-2">
+                                        <div class="text-[8px] px-1 bg-blue-500/20 rounded text-blue-300">通关</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 已完成关卡 -->
+                            <div class="glass-effect rounded-lg p-2 level-complete">
+                                <div class="text-center">
+                                    <div class="bg-white/10 rounded-full w-8 h-8 flex items-center justify-center mx-auto">
+                                        <span class="text-sm font-bold text-white">4</span>
+                                    </div>
+                                    <div class="flex justify-center mt-2">
+                                        <div class="text-[8px] px-1 bg-blue-500/20 rounded text-blue-300">通关</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 已完成关卡 -->
+                            <div class="glass-effect rounded-lg p-2 level-complete">
+                                <div class="text-center">
+                                    <div class="bg-white/10 rounded-full w-8 h-8 flex items-center justify-center mx-auto">
+                                        <span class="text-sm font-bold text-white">5</span>
+                                    </div>
+                                    <div class="flex justify-center mt-2">
+                                        <div class="text-[8px] px-1 bg-blue-500/20 rounded text-blue-300">通关</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 当前关卡 -->
+                            <div class="glass-effect rounded-lg p-2 border border-yellow-400/40">
+                                <div class="text-center">
+                                    <div class="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-full w-8 h-8 flex items-center justify-center mx-auto">
+                                        <span class="text-sm font-bold text-white">6</span>
+                                    </div>
+                                    <div class="flex justify-center mt-2">
+                                        <div class="text-[8px] px-1 bg-yellow-500/20 rounded text-yellow-300">进行中</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 未解锁关卡 -->
+                            <div class="glass-effect rounded-lg p-2 level-locked">
+                                <div class="text-center">
+                                    <div class="bg-white/10 rounded-full w-8 h-8 flex items-center justify-center mx-auto">
+                                        <span class="text-sm font-bold text-white">7</span>
+                                    </div>
+                                    <div class="flex justify-center mt-2">
+                                        <i class="fas fa-lock text-[8px] text-white/50"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 基础章节 -->
+                    <div class="mb-4">
+                        <div class="flex items-center justify-center mb-2 px-2">
+                            <div class="w-1.5 h-6 bg-gradient-to-b from-blue-400 to-blue-600 rounded-full mr-2"></div>
+                            <h3 class="text-sm font-semibold text-white">基础任务：认知色彩</h3>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <!-- 已完成关卡 -->
+                            <div class="glass-effect rounded-lg p-2 level-complete">
+                                <div class="text-center">
+                                    <div class="bg-white/10 rounded-full w-8 h-8 flex items-center justify-center mx-auto">
+                                        <span class="text-sm font-bold text-white">8</span>
+                                    </div>
+                                    <div class="flex justify-center mt-2">
+                                        <div class="text-[8px] px-1 bg-blue-500/20 rounded text-blue-300">通关</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 已完成关卡 -->
+                            <div class="glass-effect rounded-lg p-2 level-complete">
+                                <div class="text-center">
+                                    <div class="bg-white/10 rounded-full w-8 h-8 flex items-center justify-center mx-auto">
+                                        <span class="text-sm font-bold text-white">9</span>
+                                    </div>
+                                    <div class="flex justify-center mt-2">
+                                        <div class="text-[8px] px-1 bg-blue-500/20 rounded text-blue-300">通关</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 未解锁关卡 -->
+                            <div class="glass-effect rounded-lg p-2 level-locked">
+                                <div class="text-center">
+                                    <div class="bg-white/10 rounded-full w-8 h-8 flex items-center justify-center mx-auto">
+                                        <span class="text-sm font-bold text-white">10</span>
+                                    </div>
+                                    <div class="flex justify-center mt-2">
+                                        <i class="fas fa-lock text-[8px] text-white/50"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 其他关卡省略 -->
+                            <div class="glass-effect rounded-lg p-2 level-locked">
+                                <div class="text-center">
+                                    <div class="bg-white/10 rounded-full w-8 h-8 flex items-center justify-center mx-auto">
+                                        <span class="text-sm font-bold text-white">11</span>
+                                    </div>
+                                    <div class="flex justify-center mt-2">
+                                        <i class="fas fa-lock text-[8px] text-white/50"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 其他关卡省略 -->
+                            <div class="glass-effect rounded-lg p-2 level-locked">
+                                <div class="text-center">
+                                    <div class="bg-white/10 rounded-full w-8 h-8 flex items-center justify-center mx-auto">
+                                        <span class="text-sm font-bold text-white">12</span>
+                                    </div>
+                                    <div class="flex justify-center mt-2">
+                                        <i class="fas fa-lock text-[8px] text-white/50"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 进阶章节 -->
+                    <div class="mb-4">
+                        <div class="flex items-center justify-center mb-2 px-2">
+                            <div class="w-1.5 h-6 bg-gradient-to-b from-purple-400 to-purple-600 rounded-full mr-2"></div>
+                            <h3 class="text-sm font-semibold text-white">进阶任务：色彩谜题</h3>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <!-- 所有关卡都未解锁 -->
+                            <div class="glass-effect rounded-lg p-2 level-locked">
+                                <div class="text-center">
+                                    <div class="bg-white/10 rounded-full w-8 h-8 flex items-center justify-center mx-auto">
+                                        <span class="text-sm font-bold text-white">25</span>
+                                    </div>
+                                    <div class="flex justify-center mt-2">
+                                        <i class="fas fa-lock text-[8px] text-white/50"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 更多未解锁关卡 -->
+                            <div class="glass-effect rounded-lg p-2 level-locked">
+                                <div class="text-center">
+                                    <div class="bg-white/10 rounded-full w-8 h-8 flex items-center justify-center mx-auto">
+                                        <span class="text-sm font-bold text-white">26</span>
+                                    </div>
+                                    <div class="flex justify-center mt-2">
+                                        <i class="fas fa-lock text-[8px] text-white/50"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 更多未解锁关卡 -->
+                            <div class="glass-effect rounded-lg p-2 level-locked">
+                                <div class="text-center">
+                                    <div class="bg-white/10 rounded-full w-8 h-8 flex items-center justify-center mx-auto">
+                                        <span class="text-sm font-bold text-white">27</span>
+                                    </div>
+                                    <div class="flex justify-center mt-2">
+                                        <i class="fas fa-lock text-[8px] text-white/50"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 显示滚动翻页 -->
+                    <div class="flex justify-center items-center py-4">
+                        <div class="text-xs text-white/50">下滑查看更多关卡</div>
+                        <i class="fas fa-chevron-down text-white/50 ml-1 animate-bounce"></i>
+                    </div>
+                    
+                    <!-- 高级章节预览 -->
+                    <div class="mb-4">
+                        <div class="flex items-center justify-center mb-2 px-2">
+                            <div class="w-1.5 h-6 bg-gradient-to-b from-red-400 to-red-600 rounded-full mr-2"></div>
+                            <h3 class="text-sm font-semibold text-white">高级任务：彩虹守护</h3>
+                        </div>
+                        <div class="glass-effect rounded-lg p-4 text-center">
+                            <div class="flex flex-col items-center">
+                                <div class="bg-white/10 w-12 h-12 rounded-full flex items-center justify-center mb-2">
+                                    <i class="fas fa-lock text-white/50 text-lg"></i>
+                                </div>
+                                <p class="text-xs text-white/70 mb-1">需要完成所有基础任务解锁</p>
+                                <div class="text-[10px] px-2 py-0.5 bg-white/10 rounded-full text-white/50">
+                                    解锁进度: 9/24
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 专家章节预览 -->
+                    <div class="mb-4">
+                        <div class="flex items-center justify-center mb-2 px-2">
+                            <div class="w-1.5 h-6 bg-gradient-to-b from-pink-400 to-pink-600 rounded-full mr-2"></div>
+                            <h3 class="text-sm font-semibold text-white">专家任务：光谱保卫战</h3>
+                        </div>
+                        <div class="glass-effect rounded-lg p-4 text-center">
+                            <div class="flex flex-col items-center">
+                                <div class="bg-white/10 w-12 h-12 rounded-full flex items-center justify-center mb-2">
+                                    <i class="fas fa-lock text-white/50 text-lg"></i>
+                                </div>
+                                <p class="text-xs text-white/70 mb-1">需要完成所有高级任务解锁</p>
+                                <div class="text-[10px] px-2 py-0.5 bg-white/10 rounded-full text-white/50">
+                                    解锁进度: 0/18
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 大师章节预览 -->
+                    <div class="mb-4">
+                        <div class="flex items-center justify-center mb-2 px-2">
+                            <div class="w-1.5 h-6 bg-gradient-to-b from-orange-400 to-orange-600 rounded-full mr-2"></div>
+                            <h3 class="text-sm font-semibold text-white">大师任务：彩虹之心</h3>
+                        </div>
+                        <div class="glass-effect rounded-lg p-4 text-center">
+                            <div class="flex flex-col items-center">
+                                <div class="bg-white/10 w-12 h-12 rounded-full flex items-center justify-center mb-2">
+                                    <i class="fas fa-lock text-white/50 text-lg"></i>
+                                </div>
+                                <p class="text-xs text-white/70 mb-1">需要完成所有专家任务解锁</p>
+                                <div class="text-[10px] px-2 py-0.5 bg-white/10 rounded-full text-white/50">
+                                    解锁进度: 0/12
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 底部导航 -->
+            <div class="absolute bottom-0 left-0 right-0 py-3 px-4 glass-effect backdrop-blur-md border-t border-white/10 flex justify-between">
+                <button class="flex flex-col items-center justify-center w-16">
+                    <i class="fas fa-home text-white/60 text-lg"></i>
+                    <span class="text-[10px] text-white/60 mt-1">首页</span>
+                </button>
+                <button class="flex flex-col items-center justify-center w-16">
+                    <i class="fas fa-graduation-cap text-white/60 text-lg"></i>
+                    <span class="text-[10px] text-white/60 mt-1">训练</span>
+                </button>
+                <button class="flex flex-col items-center justify-center w-16">
+                    <i class="fas fa-shield-alt text-white/60 text-lg"></i>
+                    <span class="text-[10px] text-white/60 mt-1">行动</span>
+                </button>
+                <button class="flex flex-col items-center justify-center w-16">
+                    <i class="fas fa-id-card text-yellow-400 text-lg"></i>
+                    <span class="text-[10px] text-yellow-400 mt-1">档案</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 关卡解锁和选择逻辑可以在此处添加
+        document.querySelectorAll('.glass-effect:not(.level-locked)').forEach(level => {
+            level.addEventListener('click', () => {
+                // 模拟选择关卡
+                alert('选择了关卡：' + level.querySelector('.text-white.truncate').textContent);
+            });
+        });
+    </script>
+</body>
+</html> 
