@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>彩虹特工 - 机密行动</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Barlow', "PingFang SC", "Microsoft YaHei", sans-serif;
+            overflow: hidden;
+        }
+        
+        /* 浮动动画 */
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            33% { transform: translateY(-10px) rotate(2deg); }
+            66% { transform: translateY(-5px) rotate(-2deg); }
+        }
+        
+        .float-bubble {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .float-bubble-alt {
+            animation: float 8s ease-in-out infinite reverse;
+        }
+        
+        .float-bubble-slow {
+            animation: float 10s ease-in-out infinite;
+        }
+        
+        /* 闪烁动画 */
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .blink-slow {
+            animation: blink 3s infinite;
+        }
+        
+        .blink-fast {
+            animation: blink 0.8s infinite;
+        }
+        
+        /* 脉冲动画 */
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .pulse-effect {
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        /* 波浪动画 */
+        @keyframes wave {
+            0% { background-position: 0 0; }
+            100% { background-position: 200px 0; }
+        }
+        
+        .wave-effect {
+            background: linear-gradient(90deg, 
+                rgba(255,255,255,0.1) 0%, 
+                rgba(255,255,255,0.3) 50%, 
+                rgba(255,255,255,0.1) 100%);
+            background-size: 200px 100%;
+            animation: wave 2s linear infinite;
+        }
+        
+        /* 玻璃拟态效果 */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        
+        /* 棋盘网格背景 */
+        .grid-pattern {
+            background-size: 40px 40px;
+            background-image:
+                linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        danger: {
+                            100: '#fee2e2',
+                            400: '#f87171',
+                            500: '#ef4444',
+                            600: '#dc2626',
+                            700: '#b91c1c',
+                        },
+                        pink: {
+                            50: '#fdf2f8',
+                            100: '#fce7f3',
+                            200: '#fbcfe8',
+                            300: '#f9a8d4',
+                            400: '#f472b6',
+                            500: '#ec4899',
+                            600: '#db2777',
+                            700: '#be185d',
+                            800: '#9d174d',
+                            900: '#831843',
+                            950: '#500724',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-[#1e0d2d]">
+    <div class="h-full w-full overflow-hidden relative">
+        <!-- 渐变背景 -->
+        <div class="absolute inset-0 bg-gradient-to-b from-[#3f1039] via-[#45155b] to-[#1e0d2d] z-0"></div>
+        
+        <!-- 网格底纹 -->
+        <div class="absolute inset-0 grid-pattern opacity-60"></div>
+        
+        <!-- 装饰性圆形元素 -->
+        <div class="absolute top-[20%] right-8 w-16 h-16 rounded-full bg-pink-400/20 float-bubble"></div>
+        <div class="absolute bottom-[40%] left-4 w-14 h-14 rounded-full bg-purple-400/20 float-bubble-alt"></div>
+        
+        <!-- 内容容器 -->
+        <div class="relative z-10 flex flex-col h-full pt-16 pb-6 px-5">
+            <!-- 返回按钮 -->
+            <div class="absolute top-5 left-5">
+                <a href="home.html" class="glass-effect p-2.5 rounded-full text-white/80 hover:text-white shadow-md shadow-black/20 border border-white/10 block">
+                    <i class="fas fa-arrow-left text-sm"></i>
+                </a>
+            </div>
+            
+            <!-- 页面标题 -->
+            <div class="text-center mb-6">
+                <div class="flex items-center justify-center gap-2 mb-1">
+                    <i class="fas fa-shield-alt text-pink-400 text-lg"></i>
+                    <h2 class="text-xl font-bold text-white">机密行动</h2>
+                </div>
+                <p class="text-xs text-pink-200 mb-2">限时破解高级加密系统</p>
+                <div class="w-16 h-1 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full mx-auto"></div>
+            </div>
+            
+            <!-- 倒计时模块 -->
+            <div class="flex flex-col items-center mb-5">
+                <div class="glass-effect rounded-2xl p-5 border border-pink-400/30 shadow-lg w-full">
+                    <div class="text-center mb-3 relative">
+                        <p class="text-sm text-pink-200 mb-1">行动时间</p>
+                        <div class="text-4xl font-bold text-white font-mono relative">
+                            <span id="timer" class="z-10 relative">01:00</span>
+                            <div class="absolute -inset-1 bg-pink-500/10 blur rounded-lg -z-1"></div>
+                        </div>
+                        <div class="absolute -top-3 -right-3 bg-gradient-to-r from-pink-600 to-pink-400 text-xs font-bold py-1 px-3 rounded-full text-white shadow-md flex items-center gap-1">
+                            <i class="fas fa-clock text-xs animate-pulse"></i>
+                            <span>限时挑战</span>
+                        </div>
+                    </div>
+                    
+                    <!-- 进度条 -->
+                    <div class="w-full h-2 bg-pink-900/30 rounded-full overflow-hidden">
+                        <div id="timerBar" class="h-full bg-gradient-to-r from-pink-500 to-purple-500 w-full"></div>
+                    </div>
+                    
+                    <div class="text-center mt-2 text-xs text-pink-200">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        时间结束前完成解密
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 难度选择区域 -->
+            <div class="space-y-3 mb-5">
+                <h3 class="text-lg font-semibold text-white mb-1 text-center">选择挑战关卡</h3>
+                
+                <!-- 关卡选项 -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <!-- 第一关 -->
+                    <div id="level-1" class="glass-effect rounded-xl p-4 shadow-lg border border-blue-400/20 transform transition hover:scale-[1.02] hover:border-blue-400/40 cursor-pointer">
+                        <div class="absolute -top-2 -left-2 bg-gradient-to-r from-blue-600 to-blue-400 text-xs font-bold py-1 px-2 rounded-full text-white shadow-md">
+                            入门级
+                        </div>
+                        <div class="flex items-center pt-1">
+                            <div class="flex-shrink-0 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg p-3 shadow-inner shadow-blue-400/30">
+                                <i class="fas fa-user-secret text-white text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h2 class="text-lg font-semibold text-white">黎明行动</h2>
+                                <div class="flex items-center">
+                                    <div class="text-[10px] px-1.5 py-0.5 bg-blue-500/20 rounded text-blue-200 flex items-center">
+                                        <i class="fas fa-key text-[8px] mr-1"></i>
+                                        代号: BW-1
+                                    </div>
+                                </div>
+                                <p class="text-xs text-pink-200 mt-1">四色密码 | 3分钟破解时限</p>
+                                <div class="flex mt-1.5 gap-1.5">
+                                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                    <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                                    <div class="w-3 h-3 rounded-full bg-blue-500"></div>
+                                </div>
+                            </div>
+                            <div class="ml-auto">
+                                <div class="text-white rounded-full w-6 h-6 flex items-center justify-center border-2 border-white">
+                                    <div id="check-1" class="w-3 h-3 rounded-full bg-blue-500"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 第二关 -->
+                    <div id="level-2" class="glass-effect rounded-xl p-4 shadow-lg border border-indigo-400/20 transform transition hover:scale-[1.02] hover:border-indigo-400/40 cursor-pointer">
+                        <div class="absolute -top-2 -left-2 bg-gradient-to-r from-indigo-600 to-indigo-400 text-xs font-bold py-1 px-2 rounded-full text-white shadow-md">
+                            进阶级
+                        </div>
+                        <div class="flex items-center pt-1">
+                            <div class="flex-shrink-0 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg p-3 shadow-inner shadow-indigo-400/30">
+                                <i class="fas fa-satellite-dish text-white text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h2 class="text-lg font-semibold text-white">暗影潜入</h2>
+                                <div class="flex items-center">
+                                    <div class="text-[10px] px-1.5 py-0.5 bg-indigo-500/20 rounded text-indigo-200 flex items-center">
+                                        <i class="fas fa-key text-[8px] mr-1"></i>
+                                        代号: SH-2
+                                    </div>
+                                </div>
+                                <p class="text-xs text-pink-200 mt-1">五色密码 | 2分钟破解时限</p>
+                                <div class="flex mt-1.5 gap-1.5">
+                                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                    <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                                    <div class="w-3 h-3 rounded-full bg-blue-500"></div>
+                                    <div class="w-3 h-3 rounded-full bg-purple-500"></div>
+                                </div>
+                            </div>
+                            <div class="ml-auto">
+                                <div class="text-white rounded-full w-6 h-6 flex items-center justify-center">
+                                    <div id="check-2" class="w-5 h-5 rounded-full border-2 border-white"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 第三关 -->
+                    <div id="level-3" class="glass-effect rounded-xl p-4 shadow-lg border border-violet-400/20 transform transition hover:scale-[1.02] hover:border-violet-400/40 cursor-pointer">
+                        <div class="absolute -top-2 -left-2 bg-gradient-to-r from-violet-600 to-violet-400 text-xs font-bold py-1 px-2 rounded-full text-white shadow-md">
+                            专家级
+                        </div>
+                        <div class="flex items-center pt-1">
+                            <div class="flex-shrink-0 bg-gradient-to-br from-violet-500 to-pink-600 rounded-lg p-3 shadow-inner shadow-violet-400/30">
+                                <i class="fas fa-fingerprint text-white text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h2 class="text-lg font-semibold text-white">凤凰突袭</h2>
+                                <div class="flex items-center">
+                                    <div class="text-[10px] px-1.5 py-0.5 bg-violet-500/20 rounded text-violet-200 flex items-center">
+                                        <i class="fas fa-key text-[8px] mr-1"></i>
+                                        代号: PX-3
+                                    </div>
+                                </div>
+                                <p class="text-xs text-pink-200 mt-1">六色密码 | 90秒破解时限</p>
+                                <div class="flex mt-1.5 gap-1.5">
+                                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                    <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                                    <div class="w-3 h-3 rounded-full bg-blue-500"></div>
+                                    <div class="w-3 h-3 rounded-full bg-purple-500"></div>
+                                    <div class="w-3 h-3 rounded-full bg-orange-500"></div>
+                                </div>
+                            </div>
+                            <div class="ml-auto">
+                                <div class="text-white rounded-full w-6 h-6 flex items-center justify-center">
+                                    <div id="check-3" class="w-5 h-5 rounded-full border-2 border-white"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 第四关 -->
+                    <div id="level-4" class="glass-effect rounded-xl p-4 shadow-lg border border-pink-400/20 transform transition hover:scale-[1.02] hover:border-pink-400/40 cursor-pointer">
+                        <div class="absolute -top-2 -left-2 bg-gradient-to-r from-pink-600 to-pink-400 text-xs font-bold py-1 px-2 rounded-full text-white shadow-md flex items-center gap-1">
+                            <i class="fas fa-skull text-[10px]"></i>
+                            绝密级
+                        </div>
+                        <div class="flex items-center pt-1">
+                            <div class="flex-shrink-0 bg-gradient-to-br from-pink-500 to-pink-700 rounded-lg p-3 shadow-inner shadow-pink-400/30">
+                                <i class="fas fa-radiation text-white text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h2 class="text-lg font-semibold text-white">猩红风暴</h2>
+                                <div class="flex items-center">
+                                    <div class="text-[10px] px-1.5 py-0.5 bg-pink-500/20 rounded text-pink-200 flex items-center">
+                                        <i class="fas fa-key text-[8px] mr-1"></i>
+                                        代号: CS-X
+                                    </div>
+                                </div>
+                                <p class="text-xs text-pink-200 mt-1">七色密码 | 60秒极限时限</p>
+                                <div class="flex mt-1.5 gap-1.5 flex-wrap max-w-[120px]">
+                                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                    <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                                    <div class="w-3 h-3 rounded-full bg-blue-500"></div>
+                                    <div class="w-3 h-3 rounded-full bg-purple-500"></div>
+                                    <div class="w-3 h-3 rounded-full bg-orange-500"></div>
+                                    <div class="w-3 h-3 rounded-full bg-cyan-500"></div>
+                                </div>
+                            </div>
+                            <div class="ml-auto">
+                                <div class="text-white rounded-full w-6 h-6 flex items-center justify-center">
+                                    <div id="check-4" class="w-5 h-5 rounded-full border-2 border-white"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 挑战说明 -->
+                <div class="mt-3 glass-effect rounded-xl p-4 shadow-lg border border-pink-400/10">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 text-pink-400 mr-3 mt-0.5">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <p class="text-xs text-pink-200">
+                            <span class="text-white font-semibold">最高机密：</span>
+                            每项行动都设有严格的时间限制，超时将导致任务失败。成功率将记录在你的特工档案中。
+                            请注意，各行动难度逐级递增，必须完成前序任务才能解锁后续挑战。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 最佳记录 -->
+            <div class="glass-effect rounded-xl p-4 shadow-lg border border-pink-400/10 mb-5">
+                <div class="flex items-center mb-2">
+                    <i class="fas fa-medal text-yellow-400 text-sm mr-2"></i>
+                    <span class="text-sm text-white font-semibold">特工战绩</span>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-y-2 gap-x-3 text-xs">
+                    <div class="flex justify-between items-center">
+                        <span class="text-pink-200">黎明行动:</span>
+                        <span class="font-mono text-white">未执行</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-pink-200">暗影潜入:</span>
+                        <span class="font-mono text-white">未执行</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-pink-200">凤凰突袭:</span>
+                        <span class="font-mono text-white">未执行</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-pink-200">猩红风暴:</span>
+                        <span class="font-mono text-white">未执行</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 底部按钮 -->
+            <div class="mt-auto flex justify-center">
+                <button id="startBtn" class="bg-gradient-to-r from-pink-600 to-purple-600 text-white rounded-full py-3 px-12 text-sm font-medium shadow-lg shadow-purple-900/30 transform transition hover:scale-105 flex items-center">
+                    <i class="fas fa-lock-open mr-2"></i>
+                    开始解密行动
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 各关卡设置
+        const levelSettings = {
+            1: { colors: 4, time: 180, name: "黎明行动", code: "BW-1" }, // 3分钟
+            2: { colors: 5, time: 120, name: "暗影潜入", code: "SH-2" }, // 2分钟
+            3: { colors: 6, time: 90, name: "凤凰突袭", code: "PX-3" },  // 1分30秒
+            4: { colors: 7, time: 60, name: "猩红风暴", code: "CS-X" }   // 1分钟
+        };
+
+        // 选择关卡
+        const levelCards = document.querySelectorAll('[id^="level-"]');
+        let selectedLevel = 1; // 默认选中第一关
+        
+        function updateLevelSelection() {
+            levelCards.forEach((card, index) => {
+                const check = card.querySelector('[id^="check-"]');
+                if (index + 1 === selectedLevel) {
+                    check.classList.remove('border-2');
+                    check.classList.add('bg-pink-500');
+                } else {
+                    check.classList.add('border-2');
+                    check.classList.remove('bg-pink-500');
+                }
+            });
+        }
+        
+        levelCards.forEach((card, index) => {
+            card.addEventListener('click', () => {
+                selectedLevel = index + 1;
+                updateLevelSelection();
+            });
+        });
+        
+        // 倒计时演示
+        const timerDisplay = document.getElementById('timer');
+        const timerBar = document.getElementById('timerBar');
+        let countdown = 60; // 秒
+        let timerInterval;
+        let timerRunning = false;
+        
+        function startTimer() {
+            if (timerRunning) return;
+            
+            timerRunning = true;
+            countdown = levelSettings[selectedLevel].time;
+            updateTimerDisplay();
+            
+            timerInterval = setInterval(() => {
+                countdown--;
+                
+                // 更新进度条宽度 (60秒->0%)
+                const percentage = (countdown / levelSettings[selectedLevel].time) * 100;
+                timerBar.style.width = `${percentage}%`;
+                
+                // 更新数字显示
+                updateTimerDisplay();
+                
+                // 时间不足10秒时，添加闪烁效果
+                if (countdown <= 10) {
+                    timerDisplay.classList.add('blink-fast');
+                    timerDisplay.classList.add('text-danger-500');
+                } else if (countdown <= 30) {
+                    timerDisplay.classList.remove('blink-fast');
+                    timerDisplay.classList.add('text-danger-500');
+                }
+                
+                // 时间结束
+                if (countdown <= 0) {
+                    clearInterval(timerInterval);
+                    timerRunning = false;
+                    alert('时间结束！彩虹密码解密失败，任务失败！');
+                    
+                    // 重置显示
+                    timerDisplay.classList.remove('blink-fast');
+                    timerDisplay.classList.remove('text-danger-500');
+                    timerBar.style.width = '100%';
+                    countdown = levelSettings[selectedLevel].time;
+                    updateTimerDisplay();
+                }
+            }, 1000);
+        }
+        
+        function updateTimerDisplay() {
+            const minutes = Math.floor(countdown / 60);
+            const seconds = countdown % 60;
+            timerDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+        
+        // 开始按钮
+        document.getElementById('startBtn').addEventListener('click', () => {
+            // 在实际应用中，这里应该跳转到游戏页面
+            // 这里仅演示倒计时效果
+            startTimer();
+            alert(`已选择${levelSettings[selectedLevel].name}（代号: ${levelSettings[selectedLevel].code}），
+执行时限：${Math.floor(levelSettings[selectedLevel].time/60)}分${levelSettings[selectedLevel].time%60 > 0 ? levelSettings[selectedLevel].time%60 + '秒' : '钟'}！
+祝你好运，特工！`);
+        });
+    </script>
+</body>
+</html> 

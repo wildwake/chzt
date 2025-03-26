@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>彩虹特工 - 首页</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/all.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Barlow', "PingFang SC", "Microsoft YaHei", sans-serif;
+            overflow: hidden;
+        }
+        
+        /* 彩虹渐变背景 */
+        .rainbow-gradient {
+            background: linear-gradient(135deg, #6366f1, #9333ea, #c026d3, #db2777, #e11d48, #f97316, #facc15);
+            background-size: 400% 400%;
+            animation: rainbow 15s ease infinite;
+        }
+        
+        @keyframes rainbow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* 浮动动画 */
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            33% { transform: translateY(-10px) rotate(2deg); }
+            66% { transform: translateY(-5px) rotate(-2deg); }
+        }
+        
+        .float-bubble {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .float-bubble-alt {
+            animation: float 8s ease-in-out infinite reverse;
+        }
+        
+        .float-bubble-slow {
+            animation: float 10s ease-in-out infinite;
+        }
+        
+        /* 闪烁动画 */
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .blink-slow {
+            animation: blink 3s infinite;
+        }
+        
+        /* 脉冲动画 */
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .pulse-effect {
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        /* 打字机动画 */
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        
+        .typing-text {
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 2px solid #fff;
+            animation: typing 3.5s steps(40) 1s 1 normal both,
+                       blink 1s steps(1) infinite;
+        }
+        
+        /* 玻璃拟态效果 */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        
+        /* 棋盘网格背景 */
+        .grid-pattern {
+            background-size: 40px 40px;
+            background-image:
+                linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+        }
+        
+        /* 慢速旋转动画 */
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .animate-spin-slow {
+            animation: spin-slow 20s linear infinite;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f5f3ff',
+                            100: '#ede9fe',
+                            200: '#ddd6fe',
+                            300: '#c4b5fd',
+                            400: '#a78bfa',
+                            500: '#8b5cf6',
+                            600: '#7c3aed',
+                            700: '#6d28d9',
+                            800: '#5b21b6',
+                            900: '#4c1d95',
+                            950: '#2e1065',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-[#1e0d2d]">
+    <div class="h-full w-full overflow-hidden relative">
+        <!-- 渐变背景 -->
+        <div class="absolute inset-0 bg-gradient-to-b from-[#230f35] via-[#271447] to-[#1e0d2d] z-0"></div>
+        
+        <!-- 网格底纹 -->
+        <div class="absolute inset-0 grid-pattern opacity-60"></div>
+        
+        <!-- 装饰性圆形元素 -->
+        <div class="absolute top-16 right-8 w-16 h-16 rounded-full bg-blue-400/20 float-bubble"></div>
+        <div class="absolute top-[30%] left-4 w-12 h-12 rounded-full bg-pink-400/20 float-bubble-alt"></div>
+        <div class="absolute bottom-[35%] right-6 w-20 h-20 rounded-full bg-purple-400/20 float-bubble-slow"></div>
+        <div class="absolute bottom-[45%] left-10 w-14 h-14 rounded-full bg-green-400/20 float-bubble"></div>
+        <div class="absolute bottom-[15%] left-[60%] w-10 h-10 rounded-full bg-yellow-400/20 float-bubble-alt"></div>
+        
+        <!-- 彩虹光束装饰 -->
+        <div class="absolute -top-20 -left-20 w-40 h-[150%] bg-gradient-to-b from-blue-500/10 via-indigo-500/5 to-transparent rotate-[30deg]"></div>
+        <div class="absolute -top-20 -right-20 w-40 h-[150%] bg-gradient-to-b from-purple-500/10 via-pink-500/5 to-transparent rotate-[-30deg]"></div>
+        
+        <!-- 内容容器 -->
+        <div class="relative z-10 flex flex-col h-full">
+            <!-- 顶部内容区域 -->
+            <div class="flex-1 pt-6 px-5">
+                <!-- 顶部状态栏 -->
+                <div class="flex justify-between items-center mb-6">
+                    <div class="flex items-center gap-2">
+                        <div class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></div>
+                        <div class="text-[10px] text-green-300 font-mono tracking-wider uppercase">Online</div>
+                    </div>
+                    <div class="text-[10px] text-primary-300/70 font-mono">
+                        <span class="text-primary-300">#RC-2024</span>
+                    </div>
+                </div>
+                
+                <!-- 标题区域 -->
+                <div class="relative mb-8">
+                    <!-- 背景装饰 -->
+                    <div class="absolute -top-10 left-0 right-0 h-40">
+                        <div class="absolute inset-0 bg-gradient-to-r from-primary-600/20 via-pink-500/20 to-primary-600/20 blur-3xl"></div>
+                    </div>
+                    
+                    <!-- 主标题 -->
+                    <div class="relative">
+                        <div class="flex flex-col items-center text-center">
+                            <div class="glass-effect px-3 py-1 rounded-lg mb-3 border-l-2 border-primary-500">
+                                <span class="text-xs text-primary-300 font-medium">彩虹特工司令部</span>
+                            </div>
+                            <h1 class="text-5xl font-bold mb-3 tracking-tight">
+                                <span style="color: #ff0000;">彩</span><span style="background: linear-gradient(to right, #ff7f00, #ffff00, #00ff00); -webkit-background-clip: text; background-clip: text; color: transparent;">虹</span><span class="text-blue-500">特工</span>
+                            </h1>
+                            <p class="text-sm text-primary-200 mb-4 tracking-wide">解密任务：拯救彩虹王国</p>
+                            
+                            <!-- 状态指示器 -->
+                            <div class="flex items-center gap-4 justify-center">
+                                <div class="flex items-center gap-2 px-3 py-1.5 bg-primary-900/50 rounded-lg border border-l-2 border-primary-500/30">
+                                    <i class="fas fa-signal-stream text-primary-400 text-xs"></i>
+                                    <span class="text-xs text-primary-300">任务进行中</span>
+                                </div>
+                                <div class="flex items-center gap-2 px-3 py-1.5 bg-green-900/30 rounded-lg border border-l-2 border-green-500/30">
+                                    <i class="fas fa-shield-check text-green-400 text-xs"></i>
+                                    <span class="text-xs text-green-300">安全连接</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 任务简报 -->
+                <div class="relative mb-8">
+                    <div class="glass-effect rounded-2xl p-5">
+                        <div class="flex flex-col items-center text-center">
+                            <div class="flex-shrink-0 mb-3">
+                                <div class="w-16 h-1 bg-gradient-to-r from-primary-400 to-primary-600 rounded-full"></div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center justify-center gap-2 mb-3">
+                                    <i class="fas fa-file-shield text-primary-400"></i>
+                                    <h3 class="text-sm font-semibold text-white">最新任务简报</h3>
+                                </div>
+                                <p class="text-xs leading-relaxed text-primary-200 max-w-sm">暗影大师入侵了彩虹王国的数据系统，窃取了维持世界色彩的核心密钥。作为彩虹特工，你必须通过解开重重色彩密码，找回失落的密钥，恢复世界的缤纷色彩。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 分隔标题 -->
+                <div class="flex items-center gap-3 mb-6 px-1 justify-center">
+                    <i class="fas fa-list-check text-primary-400"></i>
+                    <h2 class="text-base font-semibold text-white">可用行动方案</h2>
+                </div>
+                
+                <!-- 游戏模式选择区域 -->
+                <div class="px-2 space-y-4 grid grid-cols-1 gap-4 max-w-md mx-auto">
+                    <!-- 特工训练卡片 -->
+                    <a href="mode-select.html" class="block">
+                        <div class="glass-effect rounded-xl p-3.5 shadow-lg border border-primary-400/20 transform transition hover:scale-[1.02] hover:border-primary-400/40 h-full">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 bg-gradient-to-br from-blue-500 to-primary-600 rounded-lg p-3 shadow-inner shadow-primary-400/30">
+                                    <i class="fas fa-graduation-cap text-white text-xl"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h2 class="text-lg font-semibold text-white">特工训练</h2>
+                                    <p class="text-xs text-primary-200">从基础开始，学习彩虹密码</p>
+                                </div>
+                                <div class="ml-auto">
+                                    <div class="text-white rounded-full p-2 bg-primary-500/30 backdrop-blur-sm">
+                                        <i class="fas fa-chevron-right text-sm"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <!-- 机密行动卡片 -->
+                    <a href="advanced-mode.html" class="block">
+                        <div class="glass-effect rounded-xl p-3.5 shadow-lg border border-pink-400/20 transform transition hover:scale-[1.02] hover:border-pink-400/40 h-full">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 bg-gradient-to-br from-pink-500 to-purple-600 rounded-lg p-3 shadow-inner shadow-pink-400/30">
+                                    <i class="fas fa-shield-alt text-white text-xl"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h2 class="text-lg font-semibold text-white">机密行动</h2>
+                                    <p class="text-xs text-primary-200">限时挑战，考验你的解谜能力</p>
+                                </div>
+                                <div class="ml-auto">
+                                    <div class="text-white rounded-full p-2 bg-pink-500/30 backdrop-blur-sm">
+                                        <i class="fas fa-chevron-right text-sm"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <!-- 特工档案卡片 -->
+                    <a href="agent-levels.html" class="block">
+                        <div class="glass-effect rounded-xl p-3.5 shadow-lg border border-yellow-400/20 transform transition hover:scale-[1.02] hover:border-yellow-400/40 relative h-full">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-lg p-3 shadow-inner shadow-yellow-400/30">
+                                    <i class="fas fa-id-card text-white text-xl"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h2 class="text-lg font-semibold text-white">特工档案</h2>
+                                    <p class="text-xs text-primary-200">查看解密记录和特工成就</p>
+                                </div>
+                                <div class="ml-auto">
+                                    <div class="text-white rounded-full p-2 bg-yellow-500/30 backdrop-blur-sm">
+                                        <i class="fas fa-chevron-right text-sm"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <!-- 极限对决卡片 -->
+                    <div class="glass-effect rounded-xl p-3.5 shadow-lg border border-red-400/20 transform transition hover:scale-[1.02] hover:border-red-400/40 relative h-full">
+                        <div class="absolute -top-2 -right-2 bg-red-500 text-xs font-bold py-1 px-2.5 rounded-full text-white shadow-md">
+                            即将解锁
+                        </div>
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-gradient-to-br from-red-500 to-orange-600 rounded-lg p-3 shadow-inner shadow-red-400/30">
+                                <i class="fas fa-bolt text-white text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h2 class="text-lg font-semibold text-white">极限对决</h2>
+                                <p class="text-xs text-primary-200">特工之间的巅峰较量</p>
+                            </div>
+                            <div class="ml-auto">
+                                <div class="text-white rounded-full p-2 bg-red-500/20 backdrop-blur-sm opacity-60">
+                                    <i class="fas fa-chevron-right text-sm"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 底部区域 -->
+            <div class="w-full py-6 px-5 text-center">
+                <!-- 设置按钮 -->
+                <div class="flex justify-center mb-4">
+                    <button class="glass-effect px-6 py-2.5 rounded-full text-white/80 hover:text-white shadow-md shadow-black/20 border border-white/10 flex items-center gap-2">
+                        <i class="fas fa-cog"></i>
+                        <span class="text-sm">设置</span>
+                    </button>
+                </div>
+                
+                <!-- 版本信息 -->
+                <div class="text-center text-xs text-primary-300/70">
+                    代号: R-BOW1
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

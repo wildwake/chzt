@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>特工训练 - 初识密码</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Barlow', "PingFang SC", "Microsoft YaHei", sans-serif;
+            overflow: hidden;
+            background-color: #161642;
+        }
+        
+        /* 脉冲动画（呼吸灯效果） */
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+        
+        .pulse-effect {
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        /* 游戏色块边框呼吸效果 */
+        @keyframes border-pulse {
+            0%, 100% { border-color: rgba(255, 255, 255, 0.5); }
+            50% { border-color: rgba(255, 255, 255, 0.2); }
+        }
+        
+        .border-pulse {
+            animation: border-pulse 2s infinite;
+        }
+        
+        /* 网格背景 */
+        .grid-bg {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
+</head>
+<body class="grid-bg">
+    <div class="min-h-screen flex flex-col px-5 py-10 max-w-md mx-auto">
+        <!-- 顶部导航 -->
+        <header class="flex items-center justify-between mb-5">
+            <div class="flex items-center">
+                <a href="mode-select.html" class="bg-white/10 p-2.5 rounded-full text-white mr-3 hover:bg-white/20 transition-colors">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+                <div class="text-blue-400 text-xl font-bold">
+                    <span class="tracking-wider uppercase">特工训练</span>
+                </div>
+            </div>
+            <div class="bg-white/10 px-4 py-1.5 rounded-full">
+                <span class="text-white/90 text-sm">初识密码 · LEVEL 2</span>
+            </div>
+        </header>
+        
+        <!-- 任务提示 -->
+        <div class="bg-white/10 rounded-xl p-4 mb-5 border-l-4 border-blue-500">
+            <p class="text-white/90 flex items-center gap-2">
+                <i class="fas fa-lightbulb text-yellow-400"></i>
+                <span>优秀的破译专家会分析每一次尝试的结果，寻找线索的规律</span>
+            </p>
+        </div>
+        
+        <!-- 计时器信息 -->
+        <div class="flex justify-between items-center mb-5">
+            <div class="bg-white/10 rounded-lg py-2 px-4 text-white/80 flex items-center">
+                <i class="fas fa-clock mr-2 text-blue-400"></i>用时: <span id="current-time" class="ml-1 font-mono">00:00</span>
+            </div>
+            <div class="bg-white/10 rounded-lg py-2 px-4 text-white/80 flex items-center">
+                <i class="fas fa-trophy mr-2 text-yellow-400"></i>最佳: <span id="best-time" class="ml-1 font-mono">01:45</span>
+            </div>
+        </div>
+        
+        <!-- 棋盘区域 -->
+        <div class="bg-white/10 rounded-xl p-5 mb-5 flex-1">
+            <!-- 首行提示区 -->
+            <div class="flex justify-center mb-8 relative">
+                <!-- 提示色块 -->
+                <div class="w-14 h-14 rounded-lg bg-red-500 shadow-md mx-2"></div>
+                <div class="w-14 h-14 rounded-lg bg-yellow-500 shadow-md mx-2"></div>
+                <div class="w-14 h-14 rounded-lg bg-green-500 shadow-md mx-2"></div>
+                <div class="w-14 h-14 rounded-lg bg-blue-500 shadow-md mx-2"></div>
+                
+                <!-- 提示指示器 -->
+                <div class="absolute -bottom-5 left-0 right-0 flex justify-center">
+                    <div class="w-14 h-2 rounded-full bg-green-500 mx-2"></div>
+                    <div class="w-14 h-2 rounded-full bg-white mx-2"></div>
+                    <div class="w-14 h-2 rounded-full bg-white mx-2"></div>
+                    <div class="w-14 h-2 rounded-full bg-gray-800 mx-2"></div>
+                </div>
+            </div>
+            
+            <!-- 分隔线 -->
+            <div class="border-b border-white/20 mb-5"></div>
+            
+            <!-- 猜测行区域 -->
+            <div class="flex-1 flex flex-col gap-4">
+                <!-- 行1（当前操作行） -->
+                <div class="flex justify-center">
+                    <div class="w-14 h-14 rounded-lg border-2 border-white/40 border-pulse bg-black/20 mx-2"></div>
+                    <div class="w-14 h-14 rounded-lg border-2 border-white/40 border-pulse bg-black/20 mx-2"></div>
+                    <div class="w-14 h-14 rounded-lg border-2 border-white/40 border-pulse bg-black/20 mx-2"></div>
+                    <div class="w-14 h-14 rounded-lg border-2 border-white/40 border-pulse bg-black/20 mx-2"></div>
+                </div>
+                
+                <!-- 行2-6 （未激活行） -->
+                <div class="flex justify-center">
+                    <div class="w-14 h-14 rounded-lg border border-white/10 bg-black/20 mx-2"></div>
+                    <div class="w-14 h-14 rounded-lg border border-white/10 bg-black/20 mx-2"></div>
+                    <div class="w-14 h-14 rounded-lg border border-white/10 bg-black/20 mx-2"></div>
+                    <div class="w-14 h-14 rounded-lg border border-white/10 bg-black/20 mx-2"></div>
+                </div>
+                
+                <div class="flex justify-center">
+                    <div class="w-14 h-14 rounded-lg border border-white/10 bg-black/20 mx-2"></div>
+                    <div class="w-14 h-14 rounded-lg border border-white/10 bg-black/20 mx-2"></div>
+                    <div class="w-14 h-14 rounded-lg border border-white/10 bg-black/20 mx-2"></div>
+                    <div class="w-14 h-14 rounded-lg border border-white/10 bg-black/20 mx-2"></div>
+                </div>
+                
+                <div class="flex justify-center">
+                    <div class="w-14 h-14 rounded-lg border border-white/10 bg-black/20 mx-2"></div>
+                    <div class="w-14 h-14 rounded-lg border border-white/10 bg-black/20 mx-2"></div>
+                    <div class="w-14 h-14 rounded-lg border border-white/10 bg-black/20 mx-2"></div>
+                    <div class="w-14 h-14 rounded-lg border border-white/10 bg-black/20 mx-2"></div>
+                </div>
+                
+                <div class="flex justify-center">
+                    <div class="w-14 h-14 rounded-lg border border-white/10 bg-black/20 mx-2"></div>
+                    <div class="w-14 h-14 rounded-lg border border-white/10 bg-black/20 mx-2"></div>
+                    <div class="w-14 h-14 rounded-lg border border-white/10 bg-black/20 mx-2"></div>
+                    <div class="w-14 h-14 rounded-lg border border-white/10 bg-black/20 mx-2"></div>
+                </div>
+                
+                <div class="flex justify-center">
+                    <div class="w-14 h-14 rounded-lg border border-white/10 bg-black/20 mx-2"></div>
+                    <div class="w-14 h-14 rounded-lg border border-white/10 bg-black/20 mx-2"></div>
+                    <div class="w-14 h-14 rounded-lg border border-white/10 bg-black/20 mx-2"></div>
+                    <div class="w-14 h-14 rounded-lg border border-white/10 bg-black/20 mx-2"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 色彩选择区 -->
+        <div class="bg-white/10 rounded-xl py-4 px-5 mb-5 flex justify-center gap-8">
+            <button class="w-16 h-16 rounded-lg bg-red-500 hover:scale-110 transition-transform"></button>
+            <button class="w-16 h-16 rounded-lg bg-yellow-500 hover:scale-110 transition-transform"></button>
+            <button class="w-16 h-16 rounded-lg bg-green-500 hover:scale-110 transition-transform"></button>
+            <button class="w-16 h-16 rounded-lg bg-blue-500 hover:scale-110 transition-transform"></button>
+        </div>
+        
+        <!-- 功能按钮区 -->
+        <div class="grid grid-cols-3 gap-4 mb-8">
+            <button class="bg-[#ff5252] py-4 rounded-xl text-white text-base font-semibold hover:brightness-110 transition-all">
+                破解密码
+            </button>
+            <button class="bg-[#2979ff] py-4 rounded-xl text-white text-base font-semibold hover:brightness-110 transition-all">
+                清理线索
+            </button>
+            <button class="bg-[#aa00ff] py-4 rounded-xl text-white text-base font-semibold hover:brightness-110 transition-all">
+                重启任务
+            </button>
+        </div>
+        
+        <!-- 规则和声音控制区 -->
+        <div class="flex justify-center items-center gap-4 mb-4">
+            <!-- 音乐开关 -->
+            <button id="music-toggle" class="bg-white/10 px-3 py-3 rounded-lg text-white/80 text-sm flex items-center gap-2 hover:bg-white/15 transition-colors">
+                <i class="fas fa-music text-green-400"></i>
+            </button>
+            
+            <!-- 音效开关 -->
+            <button id="sound-toggle" class="bg-white/10 px-3 py-3 rounded-lg text-white/80 text-sm flex items-center gap-2 hover:bg-white/15 transition-colors">
+                <i class="fas fa-volume-high text-yellow-400"></i>
+            </button>
+            
+            <!-- 规则按钮 -->
+            <button id="rules-btn" class="bg-white/10 px-5 py-3 rounded-lg text-white/80 text-sm flex items-center gap-2 hover:bg-white/15 transition-colors">
+                <i class="fas fa-book text-blue-400"></i>
+                <span>了解规则</span>
+            </button>
+        </div>
+        
+        <!-- 规则弹窗 (默认隐藏) -->
+        <div id="rules-modal" class="fixed inset-0 flex items-center justify-center bg-black/60 z-50 hidden">
+            <div class="bg-[#1a1a4a] rounded-xl p-5 m-4 max-w-md">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg text-white font-semibold">颜色密码规则</h3>
+                    <button id="close-rules" class="text-white/70 hover:text-white">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="mb-4">
+                    <p class="text-white/80 text-sm mb-3">你需要猜测四种颜色的正确顺序。每次猜测后，系统会给予以下提示：</p>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-4 h-4 rounded-full bg-green-500"></div>
+                            <span class="text-white/70 text-sm">位置和颜色都正确</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-4 h-4 rounded-full bg-white"></div>
+                            <span class="text-white/70 text-sm">颜色正确但位置错误</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-4 h-4 rounded-full bg-gray-800"></div>
+                            <span class="text-white/70 text-sm">颜色完全错误</span>
+                        </div>
+                    </div>
+                </div>
+                <button id="got-it" class="bg-blue-500 text-white px-4 py-2 rounded-lg w-full hover:bg-blue-600 transition-colors">
+                    了解了
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 计时器功能
+        let seconds = 0;
+        const currentTimeDisplay = document.getElementById('current-time');
+        
+        function updateTimer() {
+            seconds++;
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            currentTimeDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+        }
+        
+        // 启动计时器
+        setInterval(updateTimer, 1000);
+        
+        // 音乐和音效控制
+        let musicOn = true;
+        let soundOn = true;
+        const musicToggle = document.getElementById('music-toggle');
+        const soundToggle = document.getElementById('sound-toggle');
+        
+        // 切换音乐状态
+        musicToggle.addEventListener('click', function() {
+            musicOn = !musicOn;
+            if (musicOn) {
+                musicToggle.innerHTML = '<i class="fas fa-music text-green-400"></i>';
+                // 打开音乐的逻辑
+                console.log('音乐开启');
+            } else {
+                musicToggle.innerHTML = '<i class="fas fa-music-slash text-gray-400"></i>';
+                // 关闭音乐的逻辑
+                console.log('音乐关闭');
+            }
+        });
+        
+        // 切换音效状态
+        soundToggle.addEventListener('click', function() {
+            soundOn = !soundOn;
+            if (soundOn) {
+                soundToggle.innerHTML = '<i class="fas fa-volume-high text-yellow-400"></i>';
+                // 打开音效的逻辑
+                console.log('音效开启');
+            } else {
+                soundToggle.innerHTML = '<i class="fas fa-volume-xmark text-gray-400"></i>';
+                // 关闭音效的逻辑
+                console.log('音效关闭');
+            }
+        });
+        
+        // 规则按钮点击事件
+        document.getElementById('rules-btn').addEventListener('click', function() {
+            document.getElementById('rules-modal').classList.remove('hidden');
+        });
+        
+        // 关闭规则弹窗
+        document.getElementById('close-rules').addEventListener('click', function() {
+            document.getElementById('rules-modal').classList.add('hidden');
+        });
+        
+        document.getElementById('got-it').addEventListener('click', function() {
+            document.getElementById('rules-modal').classList.add('hidden');
+        });
+    </script>
+</body>
+</html> 
